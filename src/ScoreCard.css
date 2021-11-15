@@ -1,0 +1,13 @@
+table thead,
+table tfoot {
+  position: sticky;
+}
+table thead {
+  inset-block-start: 0; /* "top" */
+}
+table tr th:first-child, 
+table tr td:first-child {
+  position: sticky;
+  opacity: 1;
+  inset-inline-start: 0; /* "left" */
+}
