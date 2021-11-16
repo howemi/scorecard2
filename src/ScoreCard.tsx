@@ -189,6 +189,7 @@ export const ScoreCard = () => {
 
       <VStack>
         <Button onClick={toggleControls}>{controlsOpen ? "Hide" : "Show"} controls</Button>
+        {/* TODO: Make the collapse area look nicer */}
         <Collapse in={controlsOpen}>
           <ButtonGroup isAttached>
             <Button onClick={clearScores}>Clear Scores</Button>
@@ -196,7 +197,7 @@ export const ScoreCard = () => {
             <Button onClick={deleteRounds} isDisabled={rounds.length === 1}>Delete Rounds</Button>
           </ButtonGroup>
         </Collapse>
-        <Button onClick={toggleTemplates}>{controlsOpen ? "Hide" : "Show"} templates</Button>
+        <Button onClick={toggleTemplates}>{templatesOpen ? "Hide" : "Show"} templates</Button>
         <Collapse in={templatesOpen}>
           <Button onClick={playMayI}>May I</Button>
         </Collapse>
