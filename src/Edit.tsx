@@ -35,6 +35,7 @@ export const Edit = (props: EditProps) => {
     <Input
       autoFocus
       size="xs"
+      //TODO: experimetn chaning the font size vs size
       defaultValue={props.value}
       onKeyUp={handleOnChange}
       onBlur={handleOnBlur}

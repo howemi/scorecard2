@@ -99,8 +99,8 @@ export const ScoreCard = () => {
 
   const playerCols = players.map((player, index) =>
     <Edit key={index} value={player} handleOnSubmit={(nextValue: string) => {
-          updateName(nextValue, index)
-        }}>
+      updateName(nextValue, index)
+    }}>
       <Th bg={thColor}>
       </Th>
     </Edit>
@@ -138,8 +138,8 @@ export const ScoreCard = () => {
 
   return (
     <Container
-    overflowX="auto"
-    maxW="container.lg"
+      overflowX="auto"
+      maxW="container.lg"
     >
       <Table variant="striped">
         <Thead>
@@ -168,8 +168,8 @@ export const ScoreCard = () => {
           <Tr>
             <Th bg={thColor}>Totals</Th>
             {
-              totals().map((value, index) => 
-                <Th bg={thColor} key={index}>{ value }</Th>
+              totals().map((value, index) =>
+                <Th bg={thColor} key={index}>{value}</Th>
               )
             }
           </Tr>
