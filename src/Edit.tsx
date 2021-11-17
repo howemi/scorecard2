@@ -28,7 +28,8 @@ export const Edit = (props: EditProps) => {
   }
   const cloneWithText = React.cloneElement(props.children, {
     children: props.value,
-    onClick: handleClickText,
+    onFocus: handleClickText,
+    tabindex: 0,
     ref: originalRef,
   })
   const input = (
