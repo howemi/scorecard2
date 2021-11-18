@@ -7,6 +7,7 @@ import {
   VStack,
   // Code,
   Grid,
+  Container,
 } from "@chakra-ui/react"
 import theme from './theme'
 import { ScoreCard } from "./ScoreCard"
@@ -15,7 +16,7 @@ import { ColorModeSwitcher } from "./ColorModeSwitcher"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
+    <VStack textAlign="center" fontSize="xl">
       <ColorModeSwitcher justifySelf="flex-end" />
       {/* <Logo h="40vmin" pointerEvents="none" />
           <Text>
@@ -30,7 +31,9 @@ export const App = () => (
           >
             Learn Chakra
           </Link> */}
-      <ScoreCard />
-    </Box>
+      <Container>
+        <ScoreCard />
+      </Container>
+    </VStack>
   </ChakraProvider>
 )
