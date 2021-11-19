@@ -1,38 +1,32 @@
+/**
+ * TODO:
+ *        - Export tips into own component and then make it hideable
+ */
 import * as React from "react"
 import {
   ChakraProvider,
-  Box,
-  // Text,
-  // Link,
   VStack,
-  // Code,
-  Grid,
   Container,
+  Text,
 } from "@chakra-ui/react"
+import ErrorBoundary from "./ErrorBoundary"
 import theme from './theme'
 import { ScoreCard } from "./ScoreCard"
 import { ColorModeSwitcher } from "./ColorModeSwitcher"
-// import { Logo } from "./Logo"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-    <VStack textAlign="center" fontSize="xl">
+    <VStack textAlign="center" fontSize="xl" mb="40vh">
       <ColorModeSwitcher justifySelf="flex-end" />
-      {/* <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link> */}
-      <Container>
-        <ScoreCard />
+      <Container maxW="container.lg">
+        <ErrorBoundary>
+          <ScoreCard />
+          <Text mt="40px" align="left">Tips</Text>
+          <Text mt="20px" align="left">Press the green '+' buttons to add rounds and players</Text>
+          <Text mt="20px" align="left">Press on player names to change them</Text>
+          <Text mt="20px" align="left">Remove players and rounds by deleting their names</Text>
+          <Text mt="20px" align="left">Press on scores to change them</Text>
+        </ErrorBoundary>
       </Container>
     </VStack>
   </ChakraProvider>

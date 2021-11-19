@@ -1,7 +1,9 @@
-import React from "react"
-import { useState } from "react"
+/**
+ * TODO:  - Highlight winner
+ *        - Choose win order (high score or low score wins)
+ */
+import useLocalStorage from "./customHooks"
 import {
-  Container,
   VStack,
   Table,
   Thead,
@@ -11,34 +13,35 @@ import {
   Th,
   Td,
   Collapse,
-  ButtonGroup,
   Button,
   useColorModeValue,
   Box,
   HStack,
   useDisclosure,
+  VisuallyHidden,
 } from "@chakra-ui/react"
 import { AddIcon } from "@chakra-ui/icons"
 import './ScoreCard.css'
 import { Edit } from "./Edit"
 export const ScoreCard = () => {
-  const [players, setPlayers]: [Array<string>, Function] = useState(["P1"]);
-  const [rounds, setRounds]: [Array<string>, Function] = useState(["R1"]);
-  const [cells, setCells]: [Array<Array<number>>, Function] = useState(
-    Array.from({ length: players.length }, () => Array.from({ length: rounds.length }, () => 0))
+  const [players, setPlayers] = useLocalStorage("players", ["P1"]);
+  const [rounds, setRounds] = useLocalStorage("rounds", ["1"]);
+  const [cells, setCells] = useLocalStorage("cells",
+    Array.from({ length: rounds.length }, () => Array.from({ length: players.length }, () => 0))
   );
   const { isOpen: controlsOpen, onToggle: toggleControls } = useDisclosure();
   const { isOpen: templatesOpen, onToggle: toggleTemplates } = useDisclosure();
   // TODO: Choose a better th color
   const thColor = useColorModeValue("white", "gray.800")
+  const collapseBorderColor = useColorModeValue("black", "white")
   const collapseBoxProps = {
-    p: "40px",
-    color: "white",
-    mt: "4",
-    bg: "teal.500",
+    p: "30px",
+    border: "1px",
+    borderColor: collapseBorderColor,
     rounded: "md",
     shadow: "md",
   }
+
 
   const addPlayer = () => {
     setPlayers((prevPlayers: Array<string>) => ([...prevPlayers, `P${prevPlayers.length + 1}`]));
@@ -50,7 +53,7 @@ export const ScoreCard = () => {
   }
   const addRound = (roundName: string) => {
     setRounds((prevRounds: Array<string>) => ([...prevRounds, roundName]))
-    setCells((prevCells: Array<number>) => ([...prevCells, Array.from({ length: players.length }, () => 0)]));
+    setCells((prevCells) => ([...prevCells, Array.from({ length: players.length }, () => 0)]));
   }
 
   const updateName = (name: string, index: number) => {
@@ -80,24 +83,27 @@ export const ScoreCard = () => {
       })
     );
   }
-  const deleteRounds = () => {
-    setRounds(() => (["R1"]));
+  const resetRounds = () => {
+    setRounds(() => (["1"]));
     setCells(
       Array.from({ length: 1 }, () => Array.from({ length: players.length }, () => 0))
     );
   }
-  const clearScores = () => {
+  const resetScores = () => {
     setCells(
       Array.from({ length: rounds.length }, () => Array.from({ length: players.length }, () => 0))
     );
   }
+
+  const loadTemplate = (template: string[]) => {
+    setRounds(template);
+    setCells(Array.from({ length: template.length }, () => Array.from({ length: players.length }, () => 0)));
+
+  }
+
   const playMayI = () => {
     let r = ["2 sets", "1 set 1 run", "2 runs", "3 sets", "1 set 2 runs", "2 runs 1 set", "3 runs"];
-    setRounds(() => ([]));
-    setCells(() => ([]));
-    for (let round of r) {
-      addRound(round);
-    }
+    loadTemplate(r);
   }
 
   const playerCols = players.map((player, index) =>
@@ -111,7 +117,7 @@ export const ScoreCard = () => {
 
   const roundRows = rounds.map((round, roundIndex) =>
     <Tr key={roundIndex}>
-      <Th bg={thColor} variant="filled">{round}</Th>
+      <Th bg={thColor} px="10px" variant="filled">{round}</Th>
       {
         cells[roundIndex].map((cell, cellIndex) =>
           <Edit
@@ -140,12 +146,7 @@ export const ScoreCard = () => {
   }
 
   return (
-    // <VStack
-    //   spacing={4}
-    // >
-    <Box
-    // w="100%"
-    >
+    <Box>
       <Box
         maxW="100%"
         overflow="auto"
@@ -168,6 +169,7 @@ export const ScoreCard = () => {
                   border="2px"
                   borderColor="green.500"
                 >
+                  <VisuallyHidden>Add Player</VisuallyHidden>
                   <AddIcon color="green.500" />
                 </Button>
               </Th>
@@ -180,7 +182,7 @@ export const ScoreCard = () => {
           </Tbody>
           <Tfoot>
             <Tr>
-              <Th bg={thColor}>Total</Th>
+              <Th px="10px" bg={thColor}>Total</Th>
               {
                 totals().map((value, index) =>
                   <Th fontSize="xl" bg={thColor} key={index}>{value}</Th>
@@ -194,43 +196,60 @@ export const ScoreCard = () => {
         align="flex-start"
       >
         <Button
-          onClick={() => { addRound(`R${rounds.length + 1}`) }}
+          onClick={() => { addRound(`${rounds.length + 1}`) }}
           border="2px"
           borderColor="green.500"
         >
+          <VisuallyHidden>Add Round</VisuallyHidden>
           <AddIcon color="green.500" />
         </Button>
       </HStack>
 
-      <VStack>
-        <Button onClick={toggleControls}>{controlsOpen ? "Hide" : "Show"} controls</Button>
-        {/* TODO: Make the collapse area look nicer */}
+      <VStack
+        spacing={4}
+      >
+        <Button
+          variant="outline"
+          colorScheme="teal"
+          onClick={toggleControls}
+        >{controlsOpen ? "Hide" : "Show"} controls</Button>
         <Collapse in={controlsOpen}>
           <VStack {...collapseBoxProps}
           >
             <Button
-              onClick={clearScores}
-            >Clear Scores</Button>
+              variant="outline"
+              isFullWidth
+              onClick={resetScores}
+            >Reset Scores</Button>
             <Button
+              variant="outline"
+              isFullWidth
               onClick={deletePlayers}
               isDisabled={players.length === 1}
             >Reset Players</Button>
             <Button
-              onClick={deleteRounds}
+              variant="outline"
+              isFullWidth
+              onClick={resetRounds}
               isDisabled={rounds.length === 1}
-            >Delete Rounds</Button>
+            >Reset Rounds</Button>
           </VStack>
         </Collapse>
         <Button
+          variant="outline"
+          colorScheme="teal"
           onClick={toggleTemplates}
         >{templatesOpen ? "Hide" : "Show"} templates</Button>
         <Collapse in={templatesOpen}>
           <Box {...collapseBoxProps} >
-            <Button onClick={playMayI}>May I</Button>
+            <Button
+              isFullWidth
+              variant="outline"
+              onClick={playMayI}
+            >May I</Button>
           </Box>
         </Collapse>
       </VStack>
     </Box>
-    // </VStack>
   )
 }

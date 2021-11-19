@@ -15,28 +15,31 @@ export const Edit = (props: EditProps) => {
   const handleClickText = () => {
     setEditing(true);
   }
+
   const handleOnBlur = (e: any) => {
     if (props.handleOnSubmit) {
       props.handleOnSubmit(e.target.value);
     }
     setEditing(false);
   }
+
   const handleOnChange = (e: any) => {
     if (e.key === 'Enter' || e.keyCode === 13 || e.keyCode === 27) {
       e.target.blur()
     }
   }
+
   const cloneWithText = React.cloneElement(props.children, {
     children: props.value,
     onFocus: handleClickText,
-    tabindex: 0,
+    tabIndex: 0,
     ref: originalRef,
   })
+
   const input = (
     <Input
       autoFocus
-      size="xs"
-      //TODO: experimetn chaning the font size vs size
+      my="-3px"
       defaultValue={props.value}
       onKeyUp={handleOnChange}
       onBlur={handleOnBlur}
