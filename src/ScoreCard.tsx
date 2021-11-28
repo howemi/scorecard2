@@ -1,6 +1,7 @@
 /**
  * TODO:  - Highlight winner
  *        - Choose win order (high score or low score wins)
+ *        - Add undo/redo list
  */
 import useLocalStorage from "./customHooks"
 import {
@@ -56,7 +57,7 @@ export const ScoreCard = () => {
     setCells((prevCells) => ([...prevCells, Array.from({ length: players.length }, () => 0)]));
   }
 
-  const updateName = (name: string, index: number) => {
+  const updatePlayerName = (name: string, index: number) => {
     name = name.trim();
     if (name === players[index]) return;
     if (name.length) {
@@ -65,6 +66,18 @@ export const ScoreCard = () => {
     else {
       setPlayers([...players.slice(0, index), ...players.slice(index + 1)]);
       setCells(cells.map(row => [...row.slice(0, index), ...row.slice(index + 1)]))
+    }
+  }
+
+  const updateRoundName = (name: string, index: number) => {
+    name = name.trim();
+    if (name === rounds[index]) return;
+    if (name.length) {
+      setRounds((p: Array<string>) => ([...p.slice(0, index), name, ...p.slice(index + 1)]));
+    }
+    else {
+      setRounds([...rounds.slice(0, index), ...rounds.slice(index + 1)]);
+      setCells([...cells.slice(0, index), ...cells.slice(index + 1)]);
     }
   }
 
@@ -108,7 +121,7 @@ export const ScoreCard = () => {
 
   const playerCols = players.map((player, index) =>
     <Edit key={index} value={player} handleOnSubmit={(nextValue: string) => {
-      updateName(nextValue, index)
+      updatePlayerName(nextValue, index)
     }}>
       <Th bg={thColor}>
       </Th>
@@ -117,10 +130,19 @@ export const ScoreCard = () => {
 
   const roundRows = rounds.map((round, roundIndex) =>
     <Tr key={roundIndex}>
-      <Th bg={thColor} px="10px" variant="filled">{round}</Th>
+      <Edit
+        value={round}
+        noTabIndex
+        handleOnSubmit={(nextValue: string) => {
+          updateRoundName(nextValue, roundIndex)
+        }}
+      >
+      <Th bg={thColor} px="10px" variant="filled"></Th>
+      </Edit>
       {
         cells[roundIndex].map((cell, cellIndex) =>
           <Edit
+            isNumber={true}
             value={cell + ""}
             key={cellIndex}
             handleOnSubmit={((newVal: string) => {

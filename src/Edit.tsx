@@ -5,7 +5,9 @@ import React, { useState } from "react"
 interface EditProps {
   handleOnSubmit?: Function;
   children: JSX.Element;
-  value: string
+  value: string;
+  isNumber?: boolean;
+  noTabIndex?: boolean;
 }
 
 export const Edit = (props: EditProps) => {
@@ -32,19 +34,24 @@ export const Edit = (props: EditProps) => {
   const cloneWithText = React.cloneElement(props.children, {
     children: props.value,
     onFocus: handleClickText,
-    tabIndex: 0,
+    tabIndex: props.noTabIndex ? -1 : 0,
     ref: originalRef,
   })
 
+  const inputProps = {
+    autoFocus: true,
+    my: "-3px",
+    defaultValue: props.value,
+    onKeyUp: handleOnChange,
+    onBlur: handleOnBlur,
+    ref: inputRef,
+    variant: "flushed"
+  }
+
   const input = (
     <Input
-      autoFocus
-      my="-3px"
-      defaultValue={props.value}
-      onKeyUp={handleOnChange}
-      onBlur={handleOnBlur}
-      ref={inputRef}
-      variant="flushed"
+      {...inputProps}
+      type={props.isNumber ? "tel" : "text"}
     />
   )
 
