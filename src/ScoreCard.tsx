@@ -41,6 +41,7 @@ export const ScoreCard = () => {
     borderColor: collapseBorderColor,
     rounded: "md",
     shadow: "md",
+    mt: 4,
   }
 
 
@@ -230,47 +231,51 @@ export const ScoreCard = () => {
       <VStack
         spacing={4}
       >
-        <Button
-          variant="outline"
-          colorScheme="teal"
-          onClick={toggleControls}
-        >{controlsOpen ? "Hide" : "Show"} controls</Button>
-        <Collapse in={controlsOpen}>
-          <VStack {...collapseBoxProps}
-          >
-            <Button
-              variant="outline"
-              isFullWidth
-              onClick={resetScores}
-            >Reset Scores</Button>
-            <Button
-              variant="outline"
-              isFullWidth
-              onClick={deletePlayers}
-              isDisabled={players.length === 1}
-            >Reset Players</Button>
-            <Button
-              variant="outline"
-              isFullWidth
-              onClick={resetRounds}
-              isDisabled={rounds.length === 1}
-            >Reset Rounds</Button>
-          </VStack>
-        </Collapse>
-        <Button
-          variant="outline"
-          colorScheme="teal"
-          onClick={toggleTemplates}
-        >{templatesOpen ? "Hide" : "Show"} templates</Button>
-        <Collapse in={templatesOpen}>
-          <Box {...collapseBoxProps} >
-            <Button
-              isFullWidth
-              variant="outline"
-              onClick={playMayI}
-            >May I</Button>
-          </Box>
-        </Collapse>
+        <Box>
+          <Button
+            variant="outline"
+            colorScheme="teal"
+            onClick={toggleControls}
+          >{controlsOpen ? "Hide" : "Show"} controls</Button>
+          <Collapse in={controlsOpen} animateOpacity>
+            <VStack {...collapseBoxProps}
+            >
+              <Button
+                variant="outline"
+                isFullWidth
+                onClick={resetScores}
+              >Reset Scores</Button>
+              <Button
+                variant="outline"
+                isFullWidth
+                onClick={deletePlayers}
+                isDisabled={players.length === 1}
+              >Reset Players</Button>
+              <Button
+                variant="outline"
+                isFullWidth
+                onClick={resetRounds}
+                isDisabled={rounds.length === 1}
+              >Reset Rounds</Button>
+            </VStack>
+          </Collapse>
+        </Box>
+        <Box>
+          <Button
+            variant="outline"
+            colorScheme="teal"
+            onClick={toggleTemplates}
+          >{templatesOpen ? "Hide" : "Show"} templates</Button>
+          <Collapse in={templatesOpen} animateOpacity>
+            <Box {...collapseBoxProps} >
+              <Button
+                isFullWidth
+                variant="outline"
+                onClick={playMayI}
+              >May I</Button>
+            </Box>
+          </Collapse>
+        </Box>
       </VStack>
     </Box>
   )
