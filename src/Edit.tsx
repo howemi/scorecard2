@@ -8,6 +8,7 @@ interface EditProps {
   value: string;
   isNumber?: boolean;
   noTabIndex?: boolean;
+  autoSelect?: boolean;
 }
 
 export const Edit = (props: EditProps) => {
@@ -40,28 +41,30 @@ export const Edit = (props: EditProps) => {
 
   const inputProps = {
     autoFocus: true,
-    my: "-3px",
     defaultValue: props.value,
     onKeyUp: handleOnChange,
     onBlur: handleOnBlur,
     ref: inputRef,
-    variant: "flushed"
+    variant: "flushed",
+    my: "-3px",
   }
 
   const input = (
     <Input
       {...inputProps}
-      type={props.isNumber ? "tel" : "text"}
+      type={ props.isNumber ? "tel" : "text" }
     />
   )
 
   const cloneWithInput = React.cloneElement(props.children, {
     children: input,
-    width: originalRef.current ? originalRef.current.offsetWidth + "px" : "100%"
+    width: originalRef.current ? originalRef.current.offsetWidth + "px" : "100%",
+    height: originalRef.current ? originalRef.current.offsetHeight + "px" : "100%",
+    py: "0",
   })
   return (
     <>
-      {editing ? cloneWithInput : cloneWithText}
+      { editing ? cloneWithInput : cloneWithText }
     </>
   )
 }
