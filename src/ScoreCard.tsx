@@ -116,7 +116,7 @@ export const ScoreCard = () => {
   }
 
   const playMayI = () => {
-    let r = ["2 sets", "1 set 1 run", "2 runs", "3 sets", "1 set 2 runs", "2 runs 1 set", "3 runs"];
+    let r = ["2 sets", "1 set 1 run", "2 runs", "3 sets", "1 set 2 runs", "1 run 2 sets", "3 runs"];
     loadTemplate(r);
   }
 
